@@ -1,3 +1,4 @@
+-- g<C-a> to increment series of nums
 --[[
 
 =====================================================================
@@ -40,11 +41,13 @@ P.S. You can delete this when you're done too. It's your config now :)
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-vim.opt.guicursor = 'n-v-c-i:block'
+--vim.opt.guicursor = 'n-v-c-i:block'
 -- TODO: hereare some settings that I like
 vim.cmd("set relativenumber")
 vim.cmd("set tabstop=4")
 vim.cmd("set shiftwidth=4")
+vim.cmd("set winbar=%=%m\\ %f")
+
 
 vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open file explorer"}) -- this is a custom command -- so cool :)
 vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile SnipRun program"}) -- this is a custom command -- so cool :)
