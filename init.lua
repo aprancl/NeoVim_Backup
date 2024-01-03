@@ -49,11 +49,12 @@ vim.cmd("set shiftwidth=4")
 vim.cmd("set winbar=%=%m\\ %f")
 
 
-vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open file explorer"}) -- this is a custom command -- so cool :)
-vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile SnipRun program"}) -- this is a custom command -- so cool :)
+-- these are custom commands -- so cool :)
+vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open file explorer"}) 
+vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), {desc="Enter window mode"}) 
+vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"}) 
 vim.cmd("noremap <C-d> <C-d>zz")
 vim.cmd("noremap <C-u> <C-u>zz")
-
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
