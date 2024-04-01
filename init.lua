@@ -51,10 +51,13 @@ vim.cmd("set winbar=%=%m\\ %f")
 
 -- these are custom commands -- so cool :)
 vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open file explorer"}) 
+-- vim.keymap.set('n', '<leader>f', vim.cmd.noremap(":Hex :ter"), {desc="Open ternimal in vertical split window "}) 
+vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>', {noremap = true, silent = true})
 vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), {desc="Enter window mode"}) 
-vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"}) 
+-- vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"}) 
 vim.cmd("noremap <C-d> <C-d>zz")
 vim.cmd("noremap <C-u> <C-u>zz")
+--vim.cmd.colorscheme 'nordfox'
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -166,13 +169,16 @@ require('lazy').setup({
   {
     "EdenEast/nightfox.nvim",
     config = function()
-      vim.cmd.colorscheme 'nordfox'
+      vim.cmd.colorscheme 'torte'
     end,
   },
   {
     "Mofiqul/adwaita.nvim",
-    lazy = false,
-    priority = 1000,
+    -- lazy = false,
+    -- priority = 1000,
+    -- config = function()
+    --   vim.cmd.colorscheme 'adwaita'
+    -- end,
   },
   {
     'ramojus/mellifluous.nvim',
@@ -184,23 +190,28 @@ require('lazy').setup({
     'Abstract-IDE/Abstract-cs',
     priority = 1000
   },
+  -- {
+  --   'michaelb/sniprun',
+  --   config=true,
+  -- },
   {
-    'michaelb/sniprun',
-    config=true,
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
   },
-
+  {
+    'akinsho/flutter-tools.nvim',
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim', -- optional for vim.ui.select
+    },
+    config = true,
+  },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
---    opts = {
---      options = {
---        icons_enabled = false,
---        theme = 'nord',
---        component_separators = '|',
---        section_separators = '',
---      },
---    },
   },
 
   {
@@ -208,9 +219,10 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
+    main = "ibl",
     opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
+      -- char = '┊',
+      -- show_trailing_blankline_indent = false,
     },
   },
 
