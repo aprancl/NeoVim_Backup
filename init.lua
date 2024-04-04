@@ -50,9 +50,9 @@ vim.cmd("set winbar=%=%m\\ %f")
 
 
 -- these are custom commands -- so cool :)
-vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open file explorer"}) 
--- vim.keymap.set('n', '<leader>f', vim.cmd.noremap(":Hex :ter"), {desc="Open ternimal in vertical split window "}) 
-vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>', {noremap = true, silent = true})
+-- vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open Netrw"}) 
+vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
+vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>', {noremap = true, silent = true, desc="Open a ternimal in a vertical split"})
 vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), {desc="Enter window mode"}) 
 -- vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"}) 
 vim.cmd("noremap <C-d> <C-d>zz")
@@ -190,10 +190,6 @@ require('lazy').setup({
     'Abstract-IDE/Abstract-cs',
     priority = 1000
   },
-  -- {
-  --   'michaelb/sniprun',
-  --   config=true,
-  -- },
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -225,7 +221,10 @@ require('lazy').setup({
       -- show_trailing_blankline_indent = false,
     },
   },
-
+  {
+    "nvim-telescope/telescope-file-browser.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+  },
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
@@ -437,6 +436,7 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+-- vim.keymap.set("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
