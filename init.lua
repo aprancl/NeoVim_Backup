@@ -54,6 +54,8 @@ vim.cmd("set winbar=%=%m\\ %f")
 vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>', {noremap = true, silent = true, desc="Open a ternimal in a vertical split"})
 vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), {desc="Enter window mode"}) 
+-- vim.keymap.set('t', '<C-space>', "<C-\\><C-\n>", {silent=true} )
+vim.keymap.set('t', '<C-w>h', "<C-\\><C-n><C-w>h",{silent = true})
 -- vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"}) 
 vim.cmd("noremap <C-d> <C-d>zz")
 vim.cmd("noremap <C-u> <C-u>zz")
@@ -171,6 +173,11 @@ require('lazy').setup({
     config = function()
       vim.cmd.colorscheme 'torte'
     end,
+  },
+  {
+    "sts10/vim-pink-moon",
+    lazy = false,
+    priority = 100
   },
   {
     "Mofiqul/adwaita.nvim",
