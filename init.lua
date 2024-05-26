@@ -50,13 +50,14 @@ vim.cmd("set winbar=%=%m\\ %f")
 
 
 -- these are custom commands -- so cool :)
--- vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open Netrw"}) 
+-- vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open Netrw"})
 vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
-vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>', {noremap = true, silent = true, desc="Open a ternimal in a vertical split"})
-vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), {desc="Enter window mode"}) 
+vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>',
+  { noremap = true, silent = true, desc = "Open a ternimal in a vertical split" })
+vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), { desc = "Enter window mode" })
 -- vim.keymap.set('t', '<C-space>', "<C-\\><C-\n>", {silent=true} )
-vim.keymap.set('t', '<C-w>h', "<C-\\><C-n><C-w>h",{silent = true})
--- vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"}) 
+vim.keymap.set('t', '<C-w>h', "<C-\\><C-n><C-w>h", { silent = true })
+-- vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"})
 vim.cmd("noremap <C-d> <C-d>zz")
 vim.cmd("noremap <C-u> <C-u>zz")
 --vim.cmd.colorscheme 'nordfox'
@@ -106,7 +107,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -144,23 +145,24 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
+          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
       end,
     },
   },
 
- -- {
- --   -- Theme inspired by Atom
- --   'navarasu/onedark.nvim',
- --   priority = 1000,
- --  -- config = function()
- --  --   vim.cmd.colorscheme 'onedark'
- --  -- end,
- -- },
+  -- {
+  --   -- Theme inspired by Atom
+  --   'navarasu/onedark.nvim',
+  --   priority = 1000,
+  --  -- config = function()
+  --  --   vim.cmd.colorscheme 'onedark'
+  --  -- end,
+  -- },
 
-  -- TODO: Install stuff here! Themes 
+  -- TODO: Install stuff here! Themes
   -- My first installs ! :)
   {
     "folke/tokyonight.nvim",
@@ -170,12 +172,13 @@ require('lazy').setup({
   },
   {
     "EdenEast/nightfox.nvim",
-    config = function()
-      vim.cmd.colorscheme 'torte'
-    end,
   },
   {
     "sts10/vim-pink-moon",
+    lazy = false,
+    priority = 100
+  },
+  { "savq/melange-nvim" ,
     lazy = false,
     priority = 100
   },
@@ -189,9 +192,12 @@ require('lazy').setup({
   },
   {
     'ramojus/mellifluous.nvim',
-    lazy=false,
+    lazy = false,
     priority = 1000,
-
+    config = function()
+      vim.cmd.colorscheme 'mellifluous'
+      vim.cmd(':Mellifluous tender')
+    end,
   },
   {
     'Abstract-IDE/Abstract-cs',
@@ -233,7 +239,7 @@ require('lazy').setup({
     dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
   },
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',         opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -264,6 +270,7 @@ require('lazy').setup({
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
   -- require 'kickstart.plugins.autoformat',
+  -- VVV this was originally commented out
   -- require 'kickstart.plugins.debug',
 
   -- NOTE: The import below automatically adds your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -279,7 +286,7 @@ require('lazy').setup({
 -- NOTE: You can change these options as you wish!
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
 
 -- Make line numbers default
 vim.wo.number = true
@@ -370,7 +377,6 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
