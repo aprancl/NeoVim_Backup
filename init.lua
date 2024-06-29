@@ -54,12 +54,12 @@ vim.cmd("set winbar=%=%m\\ %f")
 vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>',
   { noremap = true, silent = true, desc = "Open a ternimal in a vertical split" })
-vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), { desc = "Enter window mode" })
+--vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), { desc = "Enter window mode" })
 -- vim.keymap.set('t', '<C-space>', "<C-\\><C-\n>", {silent=true} )
 vim.keymap.set('t', '<C-w>h', "<C-\\><C-n><C-w>h", { silent = true })
 -- vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"})
 vim.cmd("noremap <C-d> <C-d>zz")
-vim.cmd("noremap <C-u> <C-u>zz")
+-- vim.cmd("noremap <C-u> <C-u>zz")
 --vim.cmd.colorscheme 'nordfox'
 
 -- Install package manager
@@ -191,8 +191,7 @@ require('lazy').setup({
     priority = 100
   },
   {
-    'arkav/lualine-lsp-progress',
-    priority=100
+    'arkav/lualine-lsp-progress'
   },
   {
     "Mofiqul/adwaita.nvim",
@@ -209,6 +208,25 @@ require('lazy').setup({
     config = function()
       vim.cmd.colorscheme 'mellifluous'
       vim.cmd(':Mellifluous tender')
+    end,
+  },
+  {
+    'nvim-orgmode/orgmode',
+    event = 'VeryLazy',
+    ft = { 'org' },
+    config = function()
+      -- Setup orgmode
+      require('orgmode').setup({
+        org_agenda_files = '~/orgfiles/**/*',
+        org_default_notes_file = '~/orgfiles/refile.org',
+      })
+
+      -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
+      -- add ~org~ to ignore_install
+      -- require('nvim-treesitter.configs').setup({
+      --   ensure_installed = 'all',
+      --   ignore_install = { 'org' },
+      -- })
     end,
   },
   {
@@ -232,6 +250,7 @@ require('lazy').setup({
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
     -- See `:help lualine.txt`
   },
 
