@@ -54,6 +54,8 @@ vim.cmd("set winbar=%=%m\\ %f")
 vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>',
   { noremap = true, silent = true, desc = "Open a ternimal in a vertical split" })
+-- Map Escape to leave terminal mode in Neovim
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
 --vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), { desc = "Enter window mode" })
 -- vim.keymap.set('t', '<C-space>', "<C-\\><C-\n>", {silent=true} )
 vim.keymap.set('t', '<C-w>h', "<C-\\><C-n><C-w>h", { silent = true })
@@ -217,8 +219,8 @@ require('lazy').setup({
     config = function()
       -- Setup orgmode
       require('orgmode').setup({
-        org_agenda_files = '~/orgfiles/**/*',
-        org_default_notes_file = '~/orgfiles/refile.org',
+        org_agenda_files = '~/.org',
+        org_default_notes_file = '~/.org/classes.org',
       })
 
       -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
