@@ -39,6 +39,8 @@ P.S. You can delete this when you're done too. It's your config now :)
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+
+vim.g.netrw_browsex_viewer = 'brave'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 --vim.opt.guicursor = 'n-v-c-i:block'
@@ -50,19 +52,26 @@ vim.cmd("set winbar=%=%m\\ %f")
 
 
 -- these are custom commands -- so cool :)
--- vim.keymap.set('n', '<leader>t', vim.cmd.Ex, {desc="Open Netrw"})
 vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>',
   { noremap = true, silent = true, desc = "Open a ternimal in a vertical split" })
 -- Map Escape to leave terminal mode in Neovim
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
---vim.keymap.set('n', '<leader>ww', vim.cmd.noremap("<C-w>"), { desc = "Enter window mode" })
--- vim.keymap.set('t', '<C-space>', "<C-\\><C-\n>", {silent=true} )
 vim.keymap.set('t', '<C-w>h', "<C-\\><C-n><C-w>h", { silent = true })
--- vim.keymap.set('v', '<leader>r', vim.cmd.SnipRun, {desc="Compile program with SnipRun"})
 vim.cmd("noremap <C-d> <C-d>zz")
--- vim.cmd("noremap <C-u> <C-u>zz")
---vim.cmd.colorscheme 'nordfox'
+
+-- Remap the winow keybindings to match doom emacs
+vim.keymap.set('n', '<leader>wv', '<C-w>v', { noremap = true, silent = true }) -- new vertival window
+vim.keymap.set('n', '<leader>ws', '<C-w>s', { noremap = true, silent = true }) -- new horizontal window
+vim.keymap.set('n', '<leader>wl', '<C-w>l', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>wh', '<C-w>h', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>wj', '<C-w>j', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>wk', '<C-w>k', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>wc', '<C-w>c', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>wr', '<C-w>r', { noremap = true, silent = true })
+
+
+
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -509,7 +518,7 @@ local on_attach = function(_, bufnr)
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('<leader>wS', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -519,7 +528,7 @@ local on_attach = function(_, bufnr)
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
   nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
+  nmap('<leader>wL', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
