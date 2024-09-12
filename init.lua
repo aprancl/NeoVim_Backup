@@ -217,8 +217,8 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'mellifluous'
-      vim.cmd(':Mellifluous tender')
+      vim.cmd.colorscheme 'slate'
+      -- vim.cmd(':Mellifluous kanagawa_dragon')
     end,
   },
   {
@@ -509,6 +509,26 @@ local on_attach = function(_, bufnr)
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
+
+
+  require('lspconfig').pylsp.setup({
+    on_attach = on_attach, -- this should already be defined in your setup
+    settings = {
+      pylsp = {
+        plugins = {
+          pycodestyle = {
+            enabled = true, -- enable/disable pycodestyle (style guide checker)
+            ignore = {'E302', 'E303', 'W191', 'E261', 'E305', 'E501'}, -- ignore specific PEP 8 codes for blank lines
+            maxLineLength = 100, -- set your own max line length (e.g., 100)
+          },
+          -- You can also disable other linters if you don’t need them:
+          pylint = { enabled = false },
+          pyflakes = { enabled = false },
+        }
+      }
+    }
+  })
+
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
