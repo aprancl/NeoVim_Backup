@@ -46,10 +46,9 @@ vim.g.maplocalleader = ' '
 --vim.opt.guicursor = 'n-v-c-i:block'
 -- TODO: hereare some settings that I like
 vim.cmd("set relativenumber")
-vim.cmd("set tabstop=4")
-vim.cmd("set shiftwidth=4")
 vim.cmd("set winbar=%=%m\\ %f")
-
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 
 -- these are custom commands -- so cool :)
 vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
@@ -217,9 +216,17 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'slate'
+      vim.cmd.colorscheme 'catppuccin-frappe'
       -- vim.cmd(':Mellifluous kanagawa_dragon')
     end,
+  },
+  {
+    "samharju/synthweave.nvim",
+  },
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000
   },
   {
     'nvim-orgmode/orgmode',
@@ -518,7 +525,8 @@ local on_attach = function(_, bufnr)
         plugins = {
           pycodestyle = {
             enabled = true, -- enable/disable pycodestyle (style guide checker)
-            ignore = {'E302', 'E303', 'W191', 'E261', 'E305', 'E501'}, -- ignore specific PEP 8 codes for blank lines
+            -- ignore specific PEP 8 codes for 
+            ignore = {'E302', 'E303', 'W191', 'E261', 'E305', 'E501', 'E101', 'W293'},
             maxLineLength = 100, -- set your own max line length (e.g., 100)
           },
           -- You can also disable other linters if you don’t need them:
