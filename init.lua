@@ -52,7 +52,9 @@ vim.opt.shiftwidth = 4
 
 -- these are custom commands -- so cool :)
 vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
-vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>',
+-- vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>',
+  -- { noremap = true, silent = true, desc = "Open a ternimal in a vertical split" })
+vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR><C-w>15<',
   { noremap = true, silent = true, desc = "Open a ternimal in a vertical split" })
 -- Map Escape to leave terminal mode in Neovim
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
@@ -68,6 +70,7 @@ vim.keymap.set('n', '<leader>wj', '<C-w>j', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>wk', '<C-w>k', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>wc', '<C-w>c', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>wr', '<C-w>r', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>w=', '<C-w>=', { noremap = true, silent = true })
 
 
 
