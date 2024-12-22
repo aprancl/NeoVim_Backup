@@ -1,4 +1,4 @@
--- g<C-a> to increment series of nums
+-- g<C-a> to increment series of numsinit.lua
 --[[
 
 =====================================================================
@@ -54,8 +54,10 @@ vim.opt.shiftwidth = 4
 vim.keymap.set("n", "<space>t", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 -- vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR>',
   -- { noremap = true, silent = true, desc = "Open a ternimal in a vertical split" })
-vim.keymap.set('n', '<leader>f', ':Vex<CR>:ter<CR><C-w>15<',
+vim.keymap.set('n', '<leader>fv', ':Vex<CR>:ter<CR>',
   { noremap = true, silent = true, desc = "Open a ternimal in a vertical split" })
+vim.keymap.set('n', '<leader>fs', ':Hex<CR>:ter<CR>',
+  { noremap = true, silent = true, desc = "Open a ternimal in a horizontal split" })
 -- Map Escape to leave terminal mode in Neovim
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
 vim.keymap.set('t', '<C-w>h', "<C-\\><C-n><C-w>h", { silent = true })
@@ -73,7 +75,44 @@ vim.keymap.set('n', '<leader>wr', '<C-w>r', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>w=', '<C-w>=', { noremap = true, silent = true })
 
 
-
+-- local function read_kitty_theme()
+--     local kitty_config_path = vim.fn.expand("~/.config/kitty/current-theme.conf")
+--     local colors = {}
+--
+--     -- Open the file and read each line
+--     for line in io.lines(kitty_config_path) do
+--         local key, value = line:match("^(%S+)%s+(#%x+)$")
+--         if key and value then
+--             colors[key] = value
+--         end
+--     end
+--
+--     return colors
+-- end
+--
+-- -- Apply the colors to Neovim
+-- local function apply_theme(colors)
+--     -- Set background and foreground
+--     vim.cmd("highlight Normal guibg=" .. colors.background .. " guifg=" .. colors.foreground)
+--     vim.cmd("highlight Cursor guibg=" .. colors.cursor .. " guifg=" .. colors.foreground)
+--     vim.cmd("highlight Visual guibg=" .. colors.selection_background .. " guifg=" .. colors.selection_foreground)
+--
+--     -- Set terminal colors
+--     for i = 0, 15 do
+--         local color_key = "color" .. i
+--         if colors[color_key] then
+--             vim.g["terminal_color_" .. i] = colors[color_key]
+--         end
+--     end
+-- end
+--
+-- -- Load and apply the Kitty theme
+-- local colors = read_kitty_theme()
+-- if next(colors) then
+--     apply_theme(colors)
+-- end
+--
+--
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -165,15 +204,45 @@ require('lazy').setup({
       end,
     },
   },
-
-  -- {
-  --   -- Theme inspired by Atom
-  --   'navarasu/onedark.nvim',
-  --   priority = 1000,
-  --  -- config = function()
-  --  --   vim.cmd.colorscheme 'onedark'
-  --  -- end,
-  -- },
+-- {
+--   'nvimdev/dashboard-nvim',
+--   event = 'VimEnter',
+--   config = function()
+--       require('dashboard').setup {
+--         -- config
+--         theme = 'hyper',
+--         config = {
+--           week_header = {
+--             enable = true,
+--           },
+--           shortcut = {
+--             { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+--             {
+--               icon = ' ',
+--               icon_hl = '@variable',
+--               desc = 'Files',
+--               group = 'Label',
+--               action = 'Telescope find_files',
+--               key = 'f',
+--             },
+--             {
+--               desc = ' Apps',
+--               group = 'DiagnosticHint',
+--               action = 'Telescope app',
+--               key = 'a',
+--             },
+--             {
+--               desc = ' dotfiles',
+--               group = 'Number',
+--               action = 'Telescope dotfiles',
+--               key = 'd',
+--             },
+--           },
+--         },
+--       }
+--   end,
+--   dependencies = { {'nvim-tree/nvim-web-devicons'}}
+-- },
 
   -- TODO: Install stuff here! Themes
   -- My first installs ! :)
@@ -204,6 +273,12 @@ require('lazy').setup({
     priority = 100
   },
   {
+    "sho-87/kanagawa-paper.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
+  {
     'arkav/lualine-lsp-progress'
   },
   {
@@ -215,16 +290,36 @@ require('lazy').setup({
     -- end,
   },
   {
-    'ramojus/mellifluous.nvim',
+    'arzg/vim-colors-xcode',
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'catppuccin-frappe'
-      -- vim.cmd(':Mellifluous kanagawa_dragon')
-    end,
+      vim.cmd.colorscheme 'kanagawa-paper'
+      -- vim.cmd("colorscheme xcode")
+    end
+  },
+  {
+    'ramojus/mellifluous.nvim',
+    lazy = false,
+    priority = 1000,
+    -- config = function()
+    --   vim.cmd.colorscheme 'xcode'
+    --   -- vim.cmd(':Mellifluous kanagawa_dragon')
+    --   -- vim.cmd(':Mellifluous toggle_transparency')
+    -- end,
+  },
+  {
+    "scottmckendry/cyberdream.nvim"
+  },
+  {
+    "xero/miasma.nvim",
+    lazy = false,
+    priority = 1000,
   },
   {
     "samharju/synthweave.nvim",
+    lazy = false,
+    priority = 1000
   },
   {
     "catppuccin/nvim",
@@ -529,7 +624,7 @@ local on_attach = function(_, bufnr)
           pycodestyle = {
             enabled = true, -- enable/disable pycodestyle (style guide checker)
             -- ignore specific PEP 8 codes for 
-            ignore = {'E302', 'E303', 'W191', 'E261', 'E305', 'E501', 'E101', 'W293'},
+            ignore = {'E302', 'E303', 'W191', 'E261', 'E305', 'E501', 'E101', 'W293', 'E226', 'E251', 'W291', 'E111', 'E114', 'E231', 'E128', 'E121', 'E402'},
             maxLineLength = 100, -- set your own max line length (e.g., 100)
           },
           -- You can also disable other linters if you don’t need them:
