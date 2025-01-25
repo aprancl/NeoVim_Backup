@@ -74,45 +74,38 @@ vim.keymap.set('n', '<leader>wc', '<C-w>c', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>wr', '<C-w>r', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>w=', '<C-w>=', { noremap = true, silent = true })
 
+-- Autocommand to insert boilerplate for .c files
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "*.c",
+  callback = function()
+    local boilerplate = [[
+#include <stdio.h>
 
--- local function read_kitty_theme()
---     local kitty_config_path = vim.fn.expand("~/.config/kitty/current-theme.conf")
---     local colors = {}
---
---     -- Open the file and read each line
---     for line in io.lines(kitty_config_path) do
---         local key, value = line:match("^(%S+)%s+(#%x+)$")
---         if key and value then
---             colors[key] = value
---         end
---     end
---
---     return colors
--- end
---
--- -- Apply the colors to Neovim
--- local function apply_theme(colors)
---     -- Set background and foreground
---     vim.cmd("highlight Normal guibg=" .. colors.background .. " guifg=" .. colors.foreground)
---     vim.cmd("highlight Cursor guibg=" .. colors.cursor .. " guifg=" .. colors.foreground)
---     vim.cmd("highlight Visual guibg=" .. colors.selection_background .. " guifg=" .. colors.selection_foreground)
---
---     -- Set terminal colors
---     for i = 0, 15 do
---         local color_key = "color" .. i
---         if colors[color_key] then
---             vim.g["terminal_color_" .. i] = colors[color_key]
---         end
---     end
--- end
---
--- -- Load and apply the Kitty theme
--- local colors = read_kitty_theme()
--- if next(colors) then
---     apply_theme(colors)
--- end
---
---
+int main() {
+    printf("Hello, World!\n");
+    return 0;
+}
+]]
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(boilerplate, "\n"))
+  end,
+})
+
+-- Autocommand to insert boilerplate for .py files
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "*.py",
+  callback = function()
+    local boilerplate = [[
+import pdb
+
+def main():
+    print("Hello, World!")
+
+if __name__ == "__main__":
+    main()
+]]
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(boilerplate, "\n"))
+  end,
+})
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -204,45 +197,6 @@ require('lazy').setup({
       end,
     },
   },
--- {
---   'nvimdev/dashboard-nvim',
---   event = 'VimEnter',
---   config = function()
---       require('dashboard').setup {
---         -- config
---         theme = 'hyper',
---         config = {
---           week_header = {
---             enable = true,
---           },
---           shortcut = {
---             { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
---             {
---               icon = ' ',
---               icon_hl = '@variable',
---               desc = 'Files',
---               group = 'Label',
---               action = 'Telescope find_files',
---               key = 'f',
---             },
---             {
---               desc = ' Apps',
---               group = 'DiagnosticHint',
---               action = 'Telescope app',
---               key = 'a',
---             },
---             {
---               desc = ' dotfiles',
---               group = 'Number',
---               action = 'Telescope dotfiles',
---               key = 'd',
---             },
---           },
---         },
---       }
---   end,
---   dependencies = { {'nvim-tree/nvim-web-devicons'}}
--- },
 
   -- TODO: Install stuff here! Themes
   -- My first installs ! :)
