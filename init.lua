@@ -122,6 +122,13 @@ function run_current_file()
     local filetype = vim.bo.filetype
     local cmd = file_runners[filetype]
     if cmd then
+        -- Modify the command for C++ files to ensure the executable name is just the base name (without .cpp)
+        if filetype == "cpp" then
+            local filename = vim.fn.expand("%:p")  -- Get the full path of the file
+            local basename = vim.fn.fnamemodify(filename, ":t:r")  -- Remove the extension (e.g., .cpp)
+            cmd = "g++ " .. filename .. " -o " .. basename .. " && ./" .. basename
+        end
+
         -- Check if there is an existing terminal
         local terminal_found = false
         local terminal_buf = nil
