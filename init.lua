@@ -122,13 +122,36 @@ function run_current_file()
     local filetype = vim.bo.filetype
     local cmd = file_runners[filetype]
     if cmd then
-        vim.cmd(string.format(":w | !%s", cmd:gsub("%%", vim.fn.expand("%"))))
+        -- Check if there is an existing terminal
+        local terminal_found = false
+        local terminal_buf = nil
+
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+            local buf = vim.api.nvim_win_get_buf(win)
+            if vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+                terminal_found = true
+                terminal_buf = buf
+                break
+            end
+        end
+
+        if terminal_found then
+            -- Send the run command to the already open terminal
+            local job_id = vim.b[terminal_buf].terminal_job_id
+            local full_cmd = cmd:gsub("%%", vim.fn.expand("%"))
+            vim.fn.chansend(job_id, full_cmd .. "\n")
+            -- Make sure the terminal stays open after execution
+            -- vim.fn.chansend(job_id, "zsh\n")  -- Keeps bash open
+        else
+            -- No terminal found, create a new terminal in a vertical split
+            vim.cmd("vsplit | terminal zsh -c \"" .. cmd:gsub("%%", vim.fn.expand("%")) .. " && zsh\"")
+        end
     else
         print("No runner configured for filetype: " .. filetype)
     end
 end
 
-vim.api.nvim_set_keymap("n", "<leader>rr", ":lua run_current_file()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>rr", ":lua run_current_file()<CR>", { noremap = true, silent = true, desc = 'Run the current file in a vsplit terminal window' })
 
 
 -- Autocommand to insert boilerplate for .py files
