@@ -80,8 +80,10 @@ vim.api.nvim_create_autocmd("BufNewFile", {
   callback = function()
     local boilerplate = [[
 #include <stdio.h>
+#include <stdlib.h>
 
-int main() {
+int main(int argc, char* argv[])
+{
     printf("Hello, World!\n");
     return 0;
 }
@@ -89,6 +91,45 @@ int main() {
     vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(boilerplate, "\n"))
   end,
 })
+
+-- Autocommand to insert boilerplate for .cpp files
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "*.cpp",
+  callback = function()
+    local boilerplate = [[
+#include <iostream>
+
+int main(int argc, char* argv[]) {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}
+]]
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(boilerplate, "\n"))
+  end,
+})
+
+
+file_runners = {
+    python = "python3 %",
+    cpp = "g++ % -o %:r && ./%:r",
+    c = "gcc % -o %:r && ./%:r",
+    sh = "bash %",
+    javascript = "node %",
+    lua = "lua %"
+}
+
+function run_current_file()
+    local filetype = vim.bo.filetype
+    local cmd = file_runners[filetype]
+    if cmd then
+        vim.cmd(string.format(":w | !%s", cmd:gsub("%%", vim.fn.expand("%"))))
+    else
+        print("No runner configured for filetype: " .. filetype)
+    end
+end
+
+vim.api.nvim_set_keymap("n", "<leader>rr", ":lua run_current_file()<CR>", { noremap = true, silent = true })
+
 
 -- Autocommand to insert boilerplate for .py files
 vim.api.nvim_create_autocmd("BufNewFile", {
