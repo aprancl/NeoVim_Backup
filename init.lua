@@ -74,6 +74,24 @@ vim.keymap.set('n', '<leader>wc', '<C-w>c', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>wr', '<C-w>r', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>w=', '<C-w>=', { noremap = true, silent = true })
 
+
+-- Autocommand to insert boilerplate for .java files
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "*.java",
+  callback = function()
+    local filename = vim.fn.expand("%:t:r") -- Get the filename without extension
+    local boilerplate = string.format([[
+public class %s {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+]], filename) -- Insert filename as class name
+
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(boilerplate, "\n"))
+  end,
+})
+
 -- Autocommand to insert boilerplate for .c files
 vim.api.nvim_create_autocmd("BufNewFile", {
   pattern = "*.c",
@@ -115,7 +133,8 @@ file_runners = {
     c = "gcc % -o %:r && ./%:r",
     sh = "bash %",
     javascript = "node %",
-    lua = "lua %"
+    lua = "lua %",
+    java = "javac % && java %"
 }
 
 function run_current_file()
@@ -126,7 +145,7 @@ function run_current_file()
         if filetype == "cpp" then
             local filename = vim.fn.expand("%:p")  -- Get the full path of the file
             local basename = vim.fn.fnamemodify(filename, ":t:r")  -- Remove the extension (e.g., .cpp)
-            cmd = "g++ " .. filename .. " -o " .. basename .. " && ./" .. basename
+            cmd = "g++ " .. "-std=c++17 " .. "-g " .. filename .. " -o " .. basename .. " && ./" .. basename
         end
 
         -- Check if there is an existing terminal
