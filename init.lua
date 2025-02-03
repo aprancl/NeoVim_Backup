@@ -81,6 +81,7 @@ vim.api.nvim_create_autocmd("BufNewFile", {
   callback = function()
     local filename = vim.fn.expand("%:t:r") -- Get the filename without extension
     local boilerplate = string.format([[
+import java.util.*;
 public class %s {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
