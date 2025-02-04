@@ -127,7 +127,6 @@ int main(int argc, char* argv[]) {
   end,
 })
 
-
 file_runners = {
     python = "python3 %",
     cpp = "g++ % -o %:r && ./%:r",
@@ -139,43 +138,49 @@ file_runners = {
 }
 
 function run_current_file()
-    local filetype = vim.bo.filetype
-    local cmd = file_runners[filetype]
-    if cmd then
-        -- Modify the command for C++ files to ensure the executable name is just the base name (without .cpp)
-        if filetype == "cpp" then
-            local filename = vim.fn.expand("%:p")  -- Get the full path of the file
-            local basename = vim.fn.fnamemodify(filename, ":t:r")  -- Remove the extension (e.g., .cpp)
-            cmd = "g++ " .. "-std=c++17 " .. "-g " .. filename .. " -o " .. basename .. " && ./" .. basename
-        end
+  local filetype = vim.bo.filetype
+  local cmd = file_runners[filetype]
+  if cmd then
+    -- Modify the command for C++ files to ensure the executable name is just the base name (without .cpp)
+    if filetype == "cpp" then
+      local filename = vim.fn.expand("%:p")  -- Get the full path of the file
+      local basename = vim.fn.fnamemodify(filename, ":t:r")  -- Remove the extension (e.g., .cpp)
+      cmd = string.format('g++ -std=c++17 -g "%s" -o %s && ./%s', filename, basename, basename)
+    elseif filetype == "c" then
+      local filename = vim.fn.expand("%:p")  -- Get the full path of the file
+      local basename = vim.fn.fnamemodify(filename, ":t:r")  -- Remove the extension (e.g., .cpp)
+      cmd = string.format('gcc -std=c17 -g "%s" -o %s && "./%s"', filename, basename, basename)
 
-        -- Check if there is an existing terminal
-        local terminal_found = false
-        local terminal_buf = nil
-
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-            local buf = vim.api.nvim_win_get_buf(win)
-            if vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
-                terminal_found = true
-                terminal_buf = buf
-                break
-            end
-        end
-
-        if terminal_found then
-            -- Send the run command to the already open terminal
-            local job_id = vim.b[terminal_buf].terminal_job_id
-            local full_cmd = cmd:gsub("%%", vim.fn.expand("%"))
-            vim.fn.chansend(job_id, full_cmd .. "\n")
-            -- Make sure the terminal stays open after execution
-            -- vim.fn.chansend(job_id, "zsh\n")  -- Keeps bash open
-        else
-            -- No terminal found, create a new terminal in a vertical split
-            vim.cmd("vsplit | terminal zsh -c \"" .. cmd:gsub("%%", vim.fn.expand("%")) .. " && zsh\"")
-        end
-    else
-        print("No runner configured for filetype: " .. filetype)
     end
+
+    -- Check if there is an existing terminal
+    local terminal_found = false
+    local terminal_buf = nil
+
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      if vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+        terminal_found = true
+        terminal_buf = buf
+        break
+      end
+    end
+
+    if terminal_found then
+      -- Send the run command to the already open terminal
+      local job_id = vim.b[terminal_buf].terminal_job_id
+      local full_cmd = cmd:gsub("%%", vim.fn.expand("%"))
+      vim.fn.chansend(job_id, full_cmd .. "\n")
+      -- Make sure the terminal stays open after execution
+      -- vim.fn.chansend(job_id, "zsh\n")  -- Keeps bash open
+    else
+      -- When no terminal exists, also use safe expansion
+      local full_cmd = cmd:gsub("%%", vim.fn.expand("%"))
+      vim.cmd("vsplit | terminal zsh -c '" .. full_cmd .. " && exec zsh'")
+    end
+  else
+    print("No runner configured for filetype: " .. filetype)
+  end
 end
 
 vim.api.nvim_set_keymap("n", "<leader>rr", ":lua run_current_file()<CR>", { noremap = true, silent = true, desc = 'Run the current file in a vsplit terminal window' })
