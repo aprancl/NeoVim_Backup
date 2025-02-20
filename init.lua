@@ -331,6 +331,17 @@ require('lazy').setup({
       vim.cmd.colorscheme 'kanagawa-paper'
     end
   },
+  { 'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
+  {
+    'olivercederborg/poimandres.nvim',
+    lazy = false,
+    priority = 1000,
+  },
   {
     'arkav/lualine-lsp-progress'
   },
@@ -799,3 +810,4 @@ cmp.setup {
 -- vim: ts=2 sts=2 sw=2 et
 
 require('lualine-config.init')
+require('colors.kittysynctheme')
