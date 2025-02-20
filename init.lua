@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
 })
 
 file_runners = {
-    python = "python3 %",
+    python = "py %",
     cpp = "g++ % -o %:r && ./%:r",
     c = "gcc % -o %:r && ./%:r",
     sh = "bash %",
@@ -145,11 +145,11 @@ function run_current_file()
     if filetype == "cpp" then
       local filename = vim.fn.expand("%:p")  -- Get the full path of the file
       local basename = vim.fn.fnamemodify(filename, ":t:r")  -- Remove the extension (e.g., .cpp)
-      cmd = string.format('g++ -std=c++17 -g "%s" -o %s && ./%s', filename, basename, basename)
+      cmd = string.format('g++ -Wall -Werror -std=c++17 -g "%s" -o %s && ./%s', filename, basename, basename)
     elseif filetype == "c" then
       local filename = vim.fn.expand("%:p")  -- Get the full path of the file
       local basename = vim.fn.fnamemodify(filename, ":t:r")  -- Remove the extension (e.g., .cpp)
-      cmd = string.format('gcc -std=c17 -g "%s" -o %s && "./%s"', filename, basename, basename)
+      cmd = string.format('gcc -Wall -Werror -std=c17 -g "%s" -o %s && "./%s"', filename, basename, basename)
 
     end
 
@@ -327,6 +327,9 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     opts = {},
+    config = function()
+      vim.cmd.colorscheme 'kanagawa-paper'
+    end
   },
   {
     'arkav/lualine-lsp-progress'
@@ -338,15 +341,6 @@ require('lazy').setup({
     -- config = function()
     --   vim.cmd.colorscheme 'adwaita'
     -- end,
-  },
-  {
-    'arzg/vim-colors-xcode',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'kanagawa-paper'
-      -- vim.cmd("colorscheme xcode")
-    end
   },
   {
     'ramojus/mellifluous.nvim',
@@ -365,11 +359,6 @@ require('lazy').setup({
     "xero/miasma.nvim",
     lazy = false,
     priority = 1000,
-  },
-  {
-    "samharju/synthweave.nvim",
-    lazy = false,
-    priority = 1000
   },
   {
     "catppuccin/nvim",
